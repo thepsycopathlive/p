@@ -96,6 +96,10 @@ void ion_page_pool_refill(struct ion_page_pool *pool)
 	if (!pool->order)
 		return;
 
+	/* skip refilling order 0 pools */
+	if (!pool->order)
+		return;
+
 	while (!pool_fillmark_reached(pool) && pool_refill_ok(pool)) {
 		page = alloc_pages(gfp_refill, pool->order);
 		if (!page)
