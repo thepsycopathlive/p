@@ -714,36 +714,6 @@ void pm_qos_update_request(struct pm_qos_request *req,
 EXPORT_SYMBOL_GPL(pm_qos_update_request);
 
 /**
- * pm_qos_update_request_timeout - modifies an existing qos request temporarily.
- * @req : handle to list element holding a pm_qos request to use
- * @new_value: defines the temporal qos request
- * @timeout_us: the effective duration of this qos request in usecs.
- *
- * After timeout_us, this qos request is cancelled automatically.
- */
-void pm_qos_update_request_timeout(struct pm_qos_request *req, s32 new_value,
-				   unsigned long timeout_us)
-{
-	if (!req)
-		return;
-	if (WARN(!pm_qos_request_active(req),
-		 "%s called for unknown object.", __func__))
-		return;
-
-	cancel_delayed_work_sync(&req->work);
-
-	trace_pm_qos_update_request_timeout(req->pm_qos_class,
-					    new_value, timeout_us);
-	if (new_value != req->node.prio)
-		pm_qos_update_target(
-			pm_qos_array[req->pm_qos_class]->constraints,
-			&req->node, PM_QOS_UPDATE_REQ, new_value, false);
-
-	schedule_delayed_work(&req->work, usecs_to_jiffies(timeout_us));
-}
-EXPORT_SYMBOL_GPL(pm_qos_update_request_timeout);
-
-/**
  * pm_qos_remove_request - modifies an existing qos request
  * @req: handle to request list element
  *
