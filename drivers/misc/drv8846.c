@@ -185,7 +185,6 @@ static unsigned int drv8846_poll(struct file *filp, poll_table *wait)
 	unsigned int mask = 0;
 	struct drv8846_soc_ctrl *c_ctrl = filp->private_data;
 
-	pr_debug("Poll enter\n");
 
 	poll_wait(filp, &poll_wait_queue, wait);
 	if (atomic_read(&c_ctrl->move_done)) {
