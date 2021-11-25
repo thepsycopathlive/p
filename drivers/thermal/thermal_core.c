@@ -338,7 +338,7 @@ static void monitor_thermal_zone(struct thermal_zone_device *tz)
 {
 	mutex_lock(&tz->lock);
 
-	if (tz->passive)
+	if (0)
 		thermal_zone_device_set_polling(thermal_passive_wq,
 						tz, tz->passive_delay);
 	else if (tz->polling_delay)
@@ -1339,8 +1339,8 @@ thermal_zone_device_register(const char *type, int trips, int mask,
 	tz->device.class = &thermal_class;
 	tz->devdata = devdata;
 	tz->trips = trips;
-	tz->passive_delay = passive_delay;
-	tz->polling_delay = polling_delay;
+	tz->passive_delay  = 0;
+	tz->polling_delay = 0;
 
 	/* sys I/F */
 	/* Add nodes that are always present via .groups */
